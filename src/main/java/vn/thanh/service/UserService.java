@@ -16,8 +16,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void handleCreateUser(User user) {
-        this.userRepository.save(user);
+    public User handleCreateUser(User user) {
+        User newUser = this.userRepository.save(user);
+        return newUser;
     }
 
     public User handleGetUserById(long id) {
@@ -38,10 +39,11 @@ public class UserService {
         return users;
     }
 
-    public void handleUpdateUser(User user) {
+    public User handleUpdateUser(User user) {
         Optional<User> userOptional = this.userRepository.findById(user.getId());
 
         if (userOptional.isPresent()) {
+
             User userUpdate = userOptional.get();
 
             userUpdate.setFullName(user.getFullName());
@@ -49,6 +51,8 @@ public class UserService {
             userUpdate.setPassword(user.getPassword());
 
             this.userRepository.save(userUpdate);
+            return userUpdate;
         }
+        return null;
     }
 }

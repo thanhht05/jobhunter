@@ -4,19 +4,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.thanh.domain.User;
 import vn.thanh.service.UserService;
+import vn.thanh.service.error.IdInvalidException;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
@@ -29,22 +30,23 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User userThanh) {
+        User newUser = this.userService.handleCreateUser(userThanh);
 
-        this.userService.handleCreateUser(userThanh);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userThanh);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable("id") long id) throws IdInvalidException {
+        if (id > 100) {
+            throw new IdInvalidException("Id should be less than 100");
+        }
         this.userService.handleDeleteUser(id);
         return ResponseEntity.ok("delete ok");
-        // return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> findUser(@PathVariable("id") long id) {
         User user = userService.handleGetUserById(id);
-
         return ResponseEntity.ok(user);
     }
 
@@ -55,11 +57,9 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public ResponseEntity<String> putMethodName(@RequestBody User user) {
-
-        this.userService.handleUpdateUser(user);
-
-        return ResponseEntity.ok("update successfully");
+    public ResponseEntity<User> putMethodName(@RequestBody User user) {
+        User userUpdate = this.userService.handleCreateUser(user);
+        return ResponseEntity.ok(userUpdate);
     }
 
 }
