@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.thanh.domain.User;
 import vn.thanh.service.UserService;
-import vn.thanh.service.error.IdInvalidException;
+import vn.thanh.util.error.IdInvalidException;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

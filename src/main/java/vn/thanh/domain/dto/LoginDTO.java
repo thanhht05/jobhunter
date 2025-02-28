@@ -1,7 +1,11 @@
 package vn.thanh.domain.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class LoginDTO {
+    @NotBlank(message = "username not blank")
     private String username;
+    @NotBlank(message = "password not blank")
     private String password;
 
     public String getUsername() {

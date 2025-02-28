@@ -1,4 +1,4 @@
-package vn.thanh.service.error;
+package vn.thanh.util.error;
 
 public class IdInvalidException extends Exception {
     public IdInvalidException(String message) {
