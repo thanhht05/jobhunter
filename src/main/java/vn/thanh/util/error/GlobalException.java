@@ -20,17 +20,16 @@ import vn.thanh.domain.RestResponse;
 public class GlobalException {
 
     @ExceptionHandler(value = {
-            IdInvalidException.class,
             UsernameNotFoundException.class,
             BadCredentialsException.class
     })
 
-    public ResponseEntity<RestResponse<Object>> handleIdException(IdInvalidException idInvalidException) {
+    public ResponseEntity<RestResponse<Object>> handleIdException(Exception e) {
 
         RestResponse<Object> res = new RestResponse<>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        res.setError(idInvalidException.getMessage());
-        res.setMessage("idInvalidException");
+        res.setError(e.getMessage());
+        res.setMessage("Login failed");
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
