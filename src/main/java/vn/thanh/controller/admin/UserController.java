@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/")
+    @CrossOrigin(origins = "http://localhost:5173")
     public String hello() {
         return "hello.java";
     }
@@ -72,7 +74,7 @@ public class UserController {
 
     @PutMapping("/users")
     public ResponseEntity<User> putMethodName(@RequestBody User user) {
-        User userUpdate = this.userService.handleCreateUser(user);
+        User userUpdate = this.userService.handleUpdateUser(user);
         return ResponseEntity.ok(userUpdate);
     }
 

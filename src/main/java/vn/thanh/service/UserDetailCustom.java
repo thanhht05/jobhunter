@@ -23,6 +23,10 @@ public class UserDetailCustom implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         vn.thanh.domain.User user = this.userService.handleGetUserByEmail(username);
 
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
         return new User(
                 user.getEmail(),
                 user.getPassword(),

@@ -1,0 +1,6 @@
+ 1: cả @ControllerAdvice và @RestControllerAdvice đều được sử dụng để xử lý các khía cạnh toàn cục  như xử lý ngoại lệ, 
+ tùy chỉnh dữ liệu, hoặc các logic chung cho controller
+
+
+ 2. Trong trường hợp có ngoại lệ: GolbalException chạy trước, sau đó là FormatRestRespone.
+Trong trường hợp không có ngoại lệ: Chỉ FormatRestRespone chạy.
