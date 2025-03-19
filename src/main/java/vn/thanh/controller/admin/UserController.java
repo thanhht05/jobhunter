@@ -2,7 +2,10 @@ package vn.thanh.controller.admin;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.turkraft.springfilter.boot.Filter;
+
 import vn.thanh.domain.User;
+import vn.thanh.domain.dto.ResultPaginationDTO;
 import vn.thanh.service.UserService;
 import vn.thanh.util.error.IdInvalidException;
 
@@ -12,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -67,9 +73,11 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = this.userService.handleGetAllUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<ResultPaginationDTO> getAllUsers(
+            @Filter Specification<User> spec, Pageable pageable) {
+
+        ResultPaginationDTO users = this.userService.handleGetAllUsers(spec, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
     @PutMapping("/users")

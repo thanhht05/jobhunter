@@ -3,9 +3,16 @@ package vn.thanh.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.turkraft.springfilter.boot.Filter;
+
 import vn.thanh.domain.User;
+import vn.thanh.domain.dto.Meta;
+import vn.thanh.domain.dto.ResultPaginationDTO;
 import vn.thanh.respository.UserRepository;
 
 @Service
@@ -34,9 +41,23 @@ public class UserService {
         this.userRepository.deleteById(id);
     }
 
-    public List<User> handleGetAllUsers() {
-        List<User> users = this.userRepository.findAll();
-        return users;
+    public ResultPaginationDTO handleGetAllUsers(
+            Specification<User> spec, Pageable pageable) {
+        Page<User> pageUser = this.userRepository.findAll(spec, pageable);
+        ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
+        Meta meta = new Meta();
+
+        meta.setPage(pageUser.getNumber() + 1); // current page
+        meta.setPageSize(pageUser.getSize()); // get maximum element
+
+        meta.setPages(pageUser.getTotalPages());
+        meta.setTotal(pageUser.getTotalElements()); // sum element in database
+
+        resultPaginationDTO.setMeta(meta);
+        resultPaginationDTO.setResult(pageUser.getContent());
+
+        return resultPaginationDTO;
+
     }
 
     public User handleUpdateUser(User user) {

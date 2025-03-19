@@ -4,10 +4,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import vn.thanh.domain.Company;
+import vn.thanh.domain.dto.ResultPaginationDTO;
 import vn.thanh.service.CompanyService;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,9 +37,19 @@ public class CompanyController {
     }
 
     @GetMapping("/companies")
-    public ResponseEntity<List<Company>> getAllCompany() {
+    public ResponseEntity<ResultPaginationDTO> getAllCompany(
+            @RequestParam("current") Optional<String> currentOptional,
+            @RequestParam("pageSize") Optional<String> pageSizeOptional) {
 
-        List<Company> companies = this.companyService.handleGetAllCompany();
+        String sCurrent = currentOptional.isPresent() ? currentOptional.get() : "";
+        String sPageSize = pageSizeOptional.isPresent() ? pageSizeOptional.get() : "";
+
+        int current = Integer.parseInt(sCurrent);
+        int pageSize = Integer.parseInt(sPageSize);
+
+        Pageable pageable = PageRequest.of(current - 1, pageSize);
+
+        ResultPaginationDTO companies = this.companyService.handleGetAllCompany(pageable);
         return ResponseEntity.ok(companies);
     }
 

@@ -40,7 +40,7 @@ public class SecurityUtil {
 
     public String createToken(Authentication authentication) {
         Instant now = Instant.now();
-        Instant validity = now.plus(this.jwtExpiration, ChronoUnit.SECONDS);
+        Instant validity = now.plus(this.jwtExpiration, ChronoUnit.SECONDS);// jwtExpiration
 
         // @formatter:off
         JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -49,7 +49,7 @@ public class SecurityUtil {
         .subject(authentication.getName())
         .claim("thanh", authentication)
         .build();
-        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build(); // create header jwt
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, 
         claims)).getTokenValue();
     }
